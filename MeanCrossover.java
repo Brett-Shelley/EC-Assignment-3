@@ -10,7 +10,6 @@ import org.uma.jmetal.util.pseudorandom.RandomGenerator;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
 
 /**
  * This class allows to apply a SBX crossover operator using two parent solutions (Double encoding).
@@ -24,33 +23,30 @@ import java.util.Random;
  * @author Juan J. Durillo
  */
 @SuppressWarnings("serial")
-public class ScatteredCrossover implements CrossoverOperator<DoubleSolution> {
-  /** EPS defines the minimum difference allowed between real values */
-  private static final double EPS = 1.0e-14;
+public class MeanCrossover implements CrossoverOperator<DoubleSolution> {
 
   private double distributionIndex ;
   private double crossoverProbability  ;
-  private RepairDoubleSolution solutionRepair ;
 
   private RandomGenerator<Double> randomGenerator ;
 
   /** Constructor */
-  public ScatteredCrossover(double crossoverProbability, double distributionIndex) {
+  public MeanCrossover(double crossoverProbability, double distributionIndex) {
     this (crossoverProbability, distributionIndex, new RepairDoubleSolutionAtBounds()) ;
   }
 
   /** Constructor */
-  public ScatteredCrossover(double crossoverProbability, double distributionIndex, RandomGenerator<Double> randomGenerator) {
+  public MeanCrossover(double crossoverProbability, double distributionIndex, RandomGenerator<Double> randomGenerator) {
     this (crossoverProbability, distributionIndex, new RepairDoubleSolutionAtBounds(), randomGenerator) ;
   }
 
   /** Constructor */
-  public ScatteredCrossover(double crossoverProbability, double distributionIndex, RepairDoubleSolution solutionRepair) {
+  public MeanCrossover(double crossoverProbability, double distributionIndex, RepairDoubleSolution solutionRepair) {
 	  this(crossoverProbability, distributionIndex, solutionRepair, () -> JMetalRandom.getInstance().nextDouble());
   }
 
   /** Constructor */
-  public ScatteredCrossover(double crossoverProbability, double distributionIndex, RepairDoubleSolution solutionRepair, RandomGenerator<Double> randomGenerator) {
+  public MeanCrossover(double crossoverProbability, double distributionIndex, RepairDoubleSolution solutionRepair, RandomGenerator<Double> randomGenerator) {
     if (crossoverProbability < 0) {
       throw new JMetalException("Crossover probability is negative: " + crossoverProbability) ;
     } else if (distributionIndex < 0) {
@@ -59,8 +55,6 @@ public class ScatteredCrossover implements CrossoverOperator<DoubleSolution> {
 
     this.crossoverProbability = crossoverProbability ;
     this.distributionIndex = distributionIndex ;
-    this.solutionRepair = solutionRepair ;
-
     this.randomGenerator = randomGenerator ;
   }
 
@@ -87,32 +81,59 @@ public class ScatteredCrossover implements CrossoverOperator<DoubleSolution> {
   public List<DoubleSolution> execute(List<DoubleSolution> solutions) {
     if (null == solutions) {
       throw new JMetalException("Null parameter") ;
-    } else if (solutions.size() != 2) {
-      throw new JMetalException("There must be two parents instead of " + solutions.size()) ;
+    } 
+
+    int size = solutions.size();
+    List<DoubleSolution> population = new ArrayList<DoubleSolution>(size);
+
+    for(int i = 0; i < size; i+=2) {
+
+        List<DoubleSolution> temp = doCrossover(crossoverProbability,solutions.get(i),solutions.get(i+1));
+        population.set(i, temp.get(0));
+        population.set(i+1, temp.get(1));
     }
 
-    return doCrossover(crossoverProbability, solutions.get(0), solutions.get(1)) ;
+    return population;
   }
 
   /** doCrossover method */
   public List<DoubleSolution> doCrossover(
       double probability, DoubleSolution parent1, DoubleSolution parent2) {
-    Random rand;
-    double temp;
-    DoubleSolution p1Cpy = (DoubleSolution) parent1.copy();
-    DoubleSolution p2Cpy = (DoubleSolution) parent2.copy();
+    List<DoubleSolution> offspring = new ArrayList<DoubleSolution>(2);
 
-    rand=new Random();
-    for(int i=0;i<50;i++){
-      if(rand.nextDouble()<probability){
-        temp=p1Cpy.getVariableValue(i);
-        p1Cpy.setVariableValue(i,p2Cpy.getVariableValue(i));
-        p2Cpy.setVariableValue(i,temp);
+    offspring.add((DoubleSolution) parent1.copy()) ;
+    offspring.add((DoubleSolution) parent2.copy()) ;
+
+
+    double y1, y2, x1, x2;
+    double ny1, ny2, nx1, nx2;
+    double alpha, beta;
+
+    if (randomGenerator.getRandomValue() <= probability) {
+      for (int i = 0; i < parent1.getNumberOfVariables(); i+=2) {
+          alpha = randomGenerator.getRandomValue();
+          beta = 1 - alpha;
+
+
+        x1 = parent1.getVariableValue(i);
+        x2 = parent2.getVariableValue(i);
+        y1 = parent1.getVariableValue(i + 1);
+        y2 = parent2.getVariableValue(i + 1);
+
+        nx1 = alpha*x1 + beta*x2;
+        nx2 = beta*x1 + alpha*x2;
+
+        ny1 = alpha*y1 + beta*y2;
+        ny2 = beta*y1 + alpha*y2;
+
+        offspring.get(0).setVariableValue(i,nx1);
+        offspring.get(0).setVariableValue(i + 1,ny1);
+        offspring.get(1).setVariableValue(i,nx2);
+        offspring.get(1).setVariableValue(i + 1,ny2);
+
       }
     }
-    List<DoubleSolution> offspring = new ArrayList<DoubleSolution>(2);
-    offspring.add(p1Cpy);
-    offspring.add(p2Cpy);
+
     return offspring;
   }
 
@@ -123,6 +144,7 @@ public class ScatteredCrossover implements CrossoverOperator<DoubleSolution> {
 
   @Override
   public int getNumberOfGeneratedChildren() {
-    return 2;
+	// TODO Auto-generated method stub
+	return 0;
   }
 }

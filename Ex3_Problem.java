@@ -7,15 +7,15 @@ import org.uma.jmetal.problem.multiobjective.Assignment2.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Ex2_Problem extends AbstractDoubleProblem {
-    public Ex2_Problem() {
+public class Ex3_Problem extends AbstractDoubleProblem {
+    public Ex3_Problem() {
         this(50);
     }
 
-    public Ex2_Problem(Integer numberOfVariables) {
-        setNumberOfVariables(numberOfVariables);
+    public Ex3_Problem(Integer numberOfVariables) {
+        setNumberOfVariables(numberOfVariables * 2);
         setNumberOfObjectives(2);
-        setName("Ex2_Problem");
+        setName("Ex3_Problem");
 
         List<Double> lowerLimit = new ArrayList<>(getNumberOfVariables());
         List<Double> upperLimit = new ArrayList<>(getNumberOfVariables());
@@ -32,11 +32,9 @@ public class Ex2_Problem extends AbstractDoubleProblem {
     public void evaluate(DoubleSolution solution) {
         ArrayList<Point> cities = new ArrayList<>();
 
-        for (int i = 0; i < (getNumberOfVariables() - 1); i++) {
-            int cell = (int)Math.floor(solution.getVariableValue(i));
-
-            int x = cell / 20;
-            int y = cell % 20;
+        for (int i = 0; i < getNumberOfVariables(); i+=2) {
+            double x = solution.getVariableValue(i);
+            double y = solution.getVariableValue(i+1);
 
             cities.add(new Point(x, y));
         }
