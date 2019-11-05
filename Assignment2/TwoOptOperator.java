@@ -1,4 +1,5 @@
 import java.util.ArrayList;
+import java.util.Collections;
 
 // Class which implements the TwoOptOperator. 
 public class TwoOptOperator implements ILocalSearchOperator
@@ -6,7 +7,6 @@ public class TwoOptOperator implements ILocalSearchOperator
     // Implements the TwoOptOperator.
     public void mutate(ArrayList<Integer> permutation, int first, int second)
     {
-        int temp;
         while (true)
         {
             if (first == second)
@@ -15,16 +15,12 @@ public class TwoOptOperator implements ILocalSearchOperator
             }
             else if (first+1 == second)
             {
-                temp = permutation.get(first);
-                permutation.set(first, permutation.get(second));
-                permutation.set(second, temp);
+                Collections.swap(permutation, first, second);
                 break;
             }
             else
             {
-                temp = permutation.get(first);
-                permutation.set(first, permutation.get(second));
-                permutation.set(second, temp);
+                Collections.swap(permutation, first, second);
                 first++;
                 second--;
             }
