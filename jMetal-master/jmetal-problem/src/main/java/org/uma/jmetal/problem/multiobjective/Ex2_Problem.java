@@ -41,7 +41,7 @@ public class Ex2_Problem extends AbstractDoubleProblem {
             cities.add(new Point(x, y));
         }
 
-        Performance fitness = new Performance(cities, 10, 5);
+        Performance fitness = new Performance(cities, 3, 3);
 
         Double o1 = fitness.getFitnessPairInverAlg(1, 1) - fitness.getFitnessPairTwoOptAlg(1, 1);
         Double o2 = fitness.getFitnessPairInverTwoOp(1, 1) - fitness.getFitnessPairTwoOptAlg(1, 1);

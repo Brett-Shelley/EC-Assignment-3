@@ -45,7 +45,7 @@ public class NSGAIIRunner extends AbstractAlgorithmRunner {
       referenceParetoFront = args[1] ;
     } else {
       problemName = "org.uma.jmetal.problem.multiobjective.Ex2_Problem";
-      referenceParetoFront = "jmetal-problem/src/test/resources/pareto_fronts/Ex2_Problem.pf" ;
+      referenceParetoFront = "" ;
     }
 
     problem = ProblemUtils.<DoubleSolution> loadProblem(problemName);
@@ -63,8 +63,8 @@ public class NSGAIIRunner extends AbstractAlgorithmRunner {
 
     algorithm = new NSGAIIBuilder<DoubleSolution>(problem, crossover, mutation)
         .setSelectionOperator(selection)
-        .setMaxEvaluations(100)
-        .setPopulationSize(5)
+        .setMaxEvaluations(3)
+        .setPopulationSize(3)
         .build() ;
 
     AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)
