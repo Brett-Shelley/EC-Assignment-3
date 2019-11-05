@@ -65,10 +65,10 @@ public class OffsetMutation implements MutationOperator<DoubleSolution> {
         sign_x = randomGenerator.getRandomValue();
         sign_y = randomGenerator.getRandomValue();
 
-        if(sign_x < 0.5) {sign_x = 0;}
-        else {sign_x = 0;}
-        if(sign_y < 0.5) {sign_x = 0;}
-        else {sign_y = 0;}
+        if(sign_x < 0.5) {sign_x = -1;}
+        else {sign_x = 1;}
+        if(sign_y < 0.5) {sign_y = -1;}
+        else {sign_y = 1;}
 
         solution.setVariableValue(i, solution.getVariableValue(i) + (offset_x * sign_x));
         solution.setVariableValue(i + 1, solution.getVariableValue(i+1) + (offset_y * sign_y));
