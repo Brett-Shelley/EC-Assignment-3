@@ -17,12 +17,12 @@ public class Ex4OffsetMutation implements MutationOperator<DoubleSolution> {
   private RandomGenerator<Double> randomGenerator ;
 
   /**  Constructor */
-  public OffsetMutation(double probability) {
+  public Ex4OffsetMutation(double probability) {
 	  this(probability, () -> JMetalRandom.getInstance().nextDouble());
   }
 
   /**  Constructor */
-  public OffsetMutation(double probability, RandomGenerator<Double> randomGenerator) {
+  public Ex4OffsetMutation(double probability, RandomGenerator<Double> randomGenerator) {
     if (probability < 0) {
       throw new JMetalException("Mutation probability is negative: " + mutationProbability) ;
     }
