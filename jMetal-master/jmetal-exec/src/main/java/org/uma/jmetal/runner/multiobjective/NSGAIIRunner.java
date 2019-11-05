@@ -8,6 +8,8 @@ import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
 import org.uma.jmetal.operator.impl.crossover.MeanCrossover;
 import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
+import org.uma.jmetal.operator.impl.crossover.ScatteredCrossover;
+import org.uma.jmetal.operator.impl.mutation.LonelyMutator;
 import org.uma.jmetal.operator.impl.mutation.OffsetMutation;
 import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
@@ -57,17 +59,18 @@ public class NSGAIIRunner extends AbstractAlgorithmRunner {
 
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;
-    crossover = new MeanCrossover(crossoverProbability, crossoverDistributionIndex) ;
+    crossover = new ScatteredCrossover(crossoverProbability, crossoverDistributionIndex) ;
 
     double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
     double mutationDistributionIndex = 20.0 ;
-    mutation = new OffsetMutation(mutationProbability, new RandomGenerator<Double>() {
-      @Override
-      public Double getRandomValue() {
-        Random rand = new Random();
-        return rand.nextDouble();
-      }
-    }) ;
+    mutation = new LonelyMutator(mutationProbability, mutationDistributionIndex);
+    //mutation = new OffsetMutation(mutationProbability, new RandomGenerator<Double>() {
+    //  @Override
+    //  public Double getRandomValue() {
+    //    Random rand = new Random();
+    //    return rand.nextDouble();
+    //  }
+    //}) ;
 
     selection = new BinaryTournamentSelection<DoubleSolution>(
         new RankingAndCrowdingDistanceComparator<DoubleSolution>());
