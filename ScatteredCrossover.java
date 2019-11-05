@@ -19,13 +19,13 @@ public class ScatteredCrossover
 		ArrayList<Integer> child = new ArrayList<Integer>(Collections.nCopies(width*height, 0));
 
 		for(int i = 0; i < width * height; i++){
-			//Adds number of cities present in this tile
+			//Checks if there are cities present in the current tile
 			boolean p1_present = (parent1.get(i) > 0);
 			boolean p2_present = (parent2.get(i) > 0);
 			if(p1_present && p2_present){	//Both are set
 				//Choose a random parent to take city from
 				if(rand.nextBoolean()){	//Take from parent 2
-					if(p1_present){child.set(i, parent1.get(i));}
+					if(p2_present){child.set(i, parent2.get(i));}
 				}
 				else{	//Take from parent 1
 					if(p1_present){child.set(i, parent1.get(i));}
