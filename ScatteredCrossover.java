@@ -5,8 +5,8 @@ import java.util.Random;
 import java.util.Collections;
 import java.lang.Math;
 
-// public class ScatteredCrossover implements Jmetal_crossover_interface
-public class ScatteredCrossover
+public class ScatteredCrossover implements Jmetal_crossover_interface
+// public class ScatteredCrossover
 {
 	public ArrayList<Integer> crossover(ArrayList<Integer> parent1, ArrayList<Integer> parent2){
 		int width = 20;
