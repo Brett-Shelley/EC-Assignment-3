@@ -83,8 +83,6 @@ public class LonelyMutator implements Jmetal_mutator_interface
 		}
 
 		//If the neighour contains a city. Increment the counter
-		if((ret_val & (1 << 0)) > 0){total++;}
-
 		if((ret_val & (1 << 0)) > 0){if(list.get(twoD_to_oneD_coords(new Point(p.x-1,p.y-1), width)) > 0){total++;}}
 		if((ret_val & (1 << 1)) > 0){if(list.get(twoD_to_oneD_coords(new Point(p.x,p.y-1), width)) > 0){total++;}}
 		if((ret_val & (1 << 2)) > 0){if(list.get(twoD_to_oneD_coords(new Point(p.x+1,p.y-1), width)) > 0){total++;}}
