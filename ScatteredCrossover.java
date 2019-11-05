@@ -13,7 +13,7 @@ public class ScatteredCrossover
 		int height = 20;
 
 		Random rand = new Random();
-		boolean offset = rand.nextBoolean();
+		boolean current_parent = rand.nextBoolean();
 
 		//Empty child with all 400 elements set to zero
 		ArrayList<Integer> child = new ArrayList<Integer>(Collections.nCopies(width*height, 0));
@@ -33,11 +33,11 @@ public class ScatteredCrossover
 			}
 			else if(p1_present || p2_present){	//Only one of them is set
 				//Depending on offset, take one from parent
-				if(offset){
+				if(current_parent){
 					if(p1_present){child.set(i, parent1.get(i));}
 					if(p2_present){child.set(i, parent2.get(i));}
 				}
-				offset = !offset;
+				current_parent = !current_parent;
 			}
 			
 		}
