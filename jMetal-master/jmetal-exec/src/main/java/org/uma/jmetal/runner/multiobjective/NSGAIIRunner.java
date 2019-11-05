@@ -1,20 +1,25 @@
 package org.uma.jmetal.runner.multiobjective;
 
+import org.apache.commons.math3.stat.descriptive.moment.Mean;
 import org.uma.jmetal.algorithm.Algorithm;
 import org.uma.jmetal.algorithm.multiobjective.nsgaii.NSGAIIBuilder;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
+import org.uma.jmetal.operator.impl.crossover.MeanCrossover;
 import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
+import org.uma.jmetal.operator.impl.mutation.OffsetMutation;
 import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.*;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
+import org.uma.jmetal.util.pseudorandom.RandomGenerator;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Class to configure and run the NSGA-II algorithm
@@ -52,11 +57,17 @@ public class NSGAIIRunner extends AbstractAlgorithmRunner {
 
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;
-    crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex) ;
+    crossover = new MeanCrossover(crossoverProbability, crossoverDistributionIndex) ;
 
     double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
     double mutationDistributionIndex = 20.0 ;
-    mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex) ;
+    mutation = new OffsetMutation(mutationProbability, new RandomGenerator<Double>() {
+      @Override
+      public Double getRandomValue() {
+        Random rand = new Random();
+        return rand.nextDouble();
+      }
+    }) ;
 
     selection = new BinaryTournamentSelection<DoubleSolution>(
         new RankingAndCrowdingDistanceComparator<DoubleSolution>());
