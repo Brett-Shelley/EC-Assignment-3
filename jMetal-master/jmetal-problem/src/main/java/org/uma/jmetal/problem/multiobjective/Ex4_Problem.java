@@ -7,12 +7,12 @@ import org.uma.jmetal.problem.multiobjective.Assignment2.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Ex3_Problem extends AbstractDoubleProblem {
-    public Ex3_Problem() {
+public class Ex4_Problem extends AbstractDoubleProblem {
+    public Ex4_Problem() {
         this(50);
     }
 
-    public Ex3_Problem(Integer numberOfCities) {
+    public Ex4_Problem(Integer numberOfCities) {
         setNumberOfVariables(numberOfCities * 3);
         setNumberOfObjectives(2);
         setName("Ex4_Problem");
@@ -46,7 +46,7 @@ public class Ex3_Problem extends AbstractDoubleProblem {
     public void evaluate(DoubleSolution solution) {
         ArrayList<Point> cities = new ArrayList<>();
         // Number of cities is one third number of variables. 
-        number_cities = getNumberOfVariables() / 3;
+        int number_cities = getNumberOfVariables() / 3;
         for (int i = 0; i < getNumberOfVariables(); i+=2) 
         {
             // Gets the cell id. 

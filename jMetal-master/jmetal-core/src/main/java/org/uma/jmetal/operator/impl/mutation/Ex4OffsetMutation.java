@@ -20,6 +20,11 @@ public class Ex4OffsetMutation implements MutationOperator<DoubleSolution> {
   public Ex4OffsetMutation(double probability) {
 	  this(probability, () -> JMetalRandom.getInstance().nextDouble());
   }
+  
+  /**  Constructor */
+  public Ex4OffsetMutation(double probability, double mutationDistributionIndex) {
+	  this(probability, () -> JMetalRandom.getInstance().nextDouble());
+  }
 
   /**  Constructor */
   public Ex4OffsetMutation(double probability, RandomGenerator<Double> randomGenerator) {
@@ -57,8 +62,9 @@ public class Ex4OffsetMutation implements MutationOperator<DoubleSolution> {
 	private void doMutation(double probability, DoubleSolution solution) {
         // Set our variables. Note that for this one offset is regenerated each time.
         double sign_x, sign_y;
-        double offset_x = randomGenerator.getRandomValue(0.1);
-        double offset_y = randomGenerator.getRandomValue(0.1);
+        // Generates offset_x and offset_y to be between 0 and 0.1
+        double offset_x = randomGenerator.getRandomValue() / 10;
+        double offset_y = randomGenerator.getRandomValue() / 10;
 
         // Get number of cities. 
         int number_cities = solution.getNumberOfVariables() / 3;
@@ -126,7 +132,7 @@ public class Ex4OffsetMutation implements MutationOperator<DoubleSolution> {
         // and end at index of the number of variables. 
         for (int i = number_cities; i < solution.getNumberOfVariables(); i+=2) 
         {
-            double chance = randomNumberGenerator.getRandomValue();
+            double chance = randomGenerator.getRandomValue();
             
             // 1 on n chance of mutating this offset. 
             if (chance < 1 / number_cities)

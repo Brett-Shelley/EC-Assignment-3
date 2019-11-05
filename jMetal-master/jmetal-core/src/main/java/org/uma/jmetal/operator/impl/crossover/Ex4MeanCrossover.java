@@ -119,13 +119,13 @@ public class Ex4MeanCrossover implements CrossoverOperator<DoubleSolution> {
         double chance = randomGenerator.getRandomValue();
         if (chance < 0.5)
         {
-            offspring.get(0).setVariableValue(i,parent1.getVariableValue(i));
-            offspring.get(1).setVariableValue(i,parent2.getVariableValue(i));
+            offspring.get(0).setVariableValue(j,parent1.getVariableValue(j));
+            offspring.get(1).setVariableValue(j,parent2.getVariableValue(j));
         }
         else
         {
-            offspring.get(0).setVariableValue(i,parent2.getVariableValue(i));
-            offspring.get(1).setVariableValue(i,parent1.getVariableValue(i));   
+            offspring.get(0).setVariableValue(j,parent2.getVariableValue(j));
+            offspring.get(1).setVariableValue(j,parent1.getVariableValue(j));   
         }
       }
       

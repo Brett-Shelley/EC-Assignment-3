@@ -25,7 +25,7 @@ import java.util.List;
  * @author Antonio J. Nebro <antonio@lcc.uma.es>
  */
 
-public class SPEA2Runner extends AbstractAlgorithmRunner {
+public class Ex4SPEA2Runner extends AbstractAlgorithmRunner {
   /**
    * @param args Command line arguments.
    * @throws java.io.IOException

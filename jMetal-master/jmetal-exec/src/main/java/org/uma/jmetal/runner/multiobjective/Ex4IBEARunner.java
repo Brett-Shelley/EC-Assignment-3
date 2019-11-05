@@ -24,7 +24,7 @@ import java.util.List;
  *
  * @author Jayden Boskell
  */
-public class IBEARunner extends AbstractAlgorithmRunner {
+public class Ex4IBEARunner extends AbstractAlgorithmRunner {
   /**
    * @param args Command line arguments.
    * @throws java.io.IOException
