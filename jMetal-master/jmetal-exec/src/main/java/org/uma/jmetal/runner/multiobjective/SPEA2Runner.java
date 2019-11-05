@@ -6,16 +6,20 @@ import org.uma.jmetal.algorithm.multiobjective.spea2.SPEA2Builder;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
+import org.uma.jmetal.operator.impl.crossover.MeanCrossover;
 import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
+import org.uma.jmetal.operator.impl.mutation.OffsetMutation;
 import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.Problem;
 import org.uma.jmetal.solution.DoubleSolution;
 import org.uma.jmetal.util.*;
 import org.uma.jmetal.util.comparator.RankingAndCrowdingDistanceComparator;
+import org.uma.jmetal.util.pseudorandom.RandomGenerator;
 
 import java.io.FileNotFoundException;
 import java.util.List;
+import java.util.Random;
 
 /**
  * Class for configuring and running the SPEA2 algorithm
@@ -48,26 +52,33 @@ public class SPEA2Runner extends AbstractAlgorithmRunner {
       problemName = args[0] ;
       referenceParetoFront = args[1] ;
     } else {
-      problemName = "org.uma.jmetal.problem.multiobjective.zdt.ZDT1";
-      referenceParetoFront = "jmetal-problem/src/test/resources/pareto_fronts/ZDT1.pf" ;
+      problemName = "org.uma.jmetal.problem.multiobjective.Ex3_Problem";
+      referenceParetoFront = "" ;
     }
 
     problem = ProblemUtils.loadProblem(problemName);
 
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;
-    crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex) ;
+    crossover = new MeanCrossover(crossoverProbability, crossoverDistributionIndex) ;
 
     double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
     double mutationDistributionIndex = 20.0 ;
-    mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex) ;
+    //mutation = new LonelyMutator(mutationProbability, mutationDistributionIndex);
+    mutation = new OffsetMutation(mutationProbability, new RandomGenerator<Double>() {
+      @Override
+      public Double getRandomValue() {
+        Random rand = new Random();
+        return rand.nextDouble();
+      }
+    }) ;
 
     selection = new BinaryTournamentSelection<DoubleSolution>(new RankingAndCrowdingDistanceComparator<DoubleSolution>());
 
     algorithm = new SPEA2Builder<>(problem, crossover, mutation)
         .setSelectionOperator(selection)
-        .setMaxIterations(250)
-        .setPopulationSize(100)
+        .setMaxIterations(3)
+        .setPopulationSize(3)
         .build() ;
 
     AlgorithmRunner algorithmRunner = new AlgorithmRunner.Executor(algorithm)

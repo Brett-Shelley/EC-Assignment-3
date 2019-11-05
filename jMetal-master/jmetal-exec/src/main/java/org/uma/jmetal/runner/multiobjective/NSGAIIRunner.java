@@ -51,7 +51,7 @@ public class NSGAIIRunner extends AbstractAlgorithmRunner {
       problemName = args[0] ;
       referenceParetoFront = args[1] ;
     } else {
-      problemName = "org.uma.jmetal.problem.multiobjective.Ex2_Problem";
+      problemName = "org.uma.jmetal.problem.multiobjective.Ex3_Problem";
       referenceParetoFront = "" ;
     }
 
@@ -59,18 +59,18 @@ public class NSGAIIRunner extends AbstractAlgorithmRunner {
 
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;
-    crossover = new ScatteredCrossover(crossoverProbability, crossoverDistributionIndex) ;
+    crossover = new MeanCrossover(crossoverProbability, crossoverDistributionIndex) ;
 
     double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
     double mutationDistributionIndex = 20.0 ;
-    mutation = new LonelyMutator(mutationProbability, mutationDistributionIndex);
-    //mutation = new OffsetMutation(mutationProbability, new RandomGenerator<Double>() {
-    //  @Override
-    //  public Double getRandomValue() {
-    //    Random rand = new Random();
-    //    return rand.nextDouble();
-    //  }
-    //}) ;
+    //mutation = new LonelyMutator(mutationProbability, mutationDistributionIndex);
+    mutation = new OffsetMutation(mutationProbability, new RandomGenerator<Double>() {
+      @Override
+      public Double getRandomValue() {
+        Random rand = new Random();
+        return rand.nextDouble();
+      }
+    }) ;
 
     selection = new BinaryTournamentSelection<DoubleSolution>(
         new RankingAndCrowdingDistanceComparator<DoubleSolution>());

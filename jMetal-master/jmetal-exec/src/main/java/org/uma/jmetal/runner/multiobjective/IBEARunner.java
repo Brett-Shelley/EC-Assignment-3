@@ -5,7 +5,9 @@ import org.uma.jmetal.algorithm.multiobjective.ibea.IBEABuilder;
 import org.uma.jmetal.operator.CrossoverOperator;
 import org.uma.jmetal.operator.MutationOperator;
 import org.uma.jmetal.operator.SelectionOperator;
+import org.uma.jmetal.operator.impl.crossover.MeanCrossover;
 import org.uma.jmetal.operator.impl.crossover.SBXCrossover;
+import org.uma.jmetal.operator.impl.mutation.OffsetMutation;
 import org.uma.jmetal.operator.impl.mutation.PolynomialMutation;
 import org.uma.jmetal.operator.impl.selection.BinaryTournamentSelection;
 import org.uma.jmetal.problem.Problem;
@@ -14,8 +16,10 @@ import org.uma.jmetal.util.AbstractAlgorithmRunner;
 import org.uma.jmetal.util.AlgorithmRunner;
 import org.uma.jmetal.util.JMetalLogger;
 import org.uma.jmetal.util.ProblemUtils;
+import org.uma.jmetal.util.pseudorandom.RandomGenerator;
 
 import java.util.List;
+import java.util.Random;
 
 /**
  * Class for configuring and running the IBEA algorithm
@@ -46,26 +50,33 @@ public class IBEARunner extends AbstractAlgorithmRunner {
       problemName = args[0] ;
       referenceParetoFront = args[1] ;
     } else {
-      problemName = "org.uma.jmetal.problem.multiobjective.zdt.ZDT1";
-      referenceParetoFront = "jmetal-problem/src/test/resources/pareto_fronts/ZDT1.pf" ;
+      problemName = "org.uma.jmetal.problem.multiobjective.Ex3_Problem";
+      referenceParetoFront = "" ;
     }
 
     problem = ProblemUtils.loadProblem(problemName);
 
     double crossoverProbability = 0.9 ;
     double crossoverDistributionIndex = 20.0 ;
-    crossover = new SBXCrossover(crossoverProbability, crossoverDistributionIndex) ;
+    crossover = new MeanCrossover(crossoverProbability, crossoverDistributionIndex) ;
 
     double mutationProbability = 1.0 / problem.getNumberOfVariables() ;
     double mutationDistributionIndex = 20.0 ;
-    mutation = new PolynomialMutation(mutationProbability, mutationDistributionIndex) ;
+    //mutation = new LonelyMutator(mutationProbability, mutationDistributionIndex);
+    mutation = new OffsetMutation(mutationProbability, new RandomGenerator<Double>() {
+      @Override
+      public Double getRandomValue() {
+        Random rand = new Random();
+        return rand.nextDouble();
+      }
+    }) ;
 
     selection = new BinaryTournamentSelection<DoubleSolution>() ;
 
     algorithm = new IBEABuilder(problem)
-      .setArchiveSize(100)
-      .setPopulationSize(100)
-      .setMaxEvaluations(25000)
+      .setArchiveSize(10)
+      .setPopulationSize(10)
+      .setMaxEvaluations(10)
       .setCrossover(crossover)
       .setMutation(mutation)
       .setSelection(selection)
